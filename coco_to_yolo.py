@@ -167,9 +167,9 @@ def main(**kwargs):
     data_dict = {
         'names': list(categories_dict.values()),
         'nc': len(categories_dict),
-        'test': f'{yolo_dataset_path}/test/images',
-        'train': f'{yolo_dataset_path}/train/images',
-        'val': f'{yolo_dataset_path}/validation/images'
+        'test': f'test/images',
+        'train': f'train/images',
+        'val': f'validation/images'
     }
 
     # Путь к файлу data.yaml
