@@ -3,6 +3,7 @@ import yaml
 import json
 import shutil
 import click
+import random
 from ImageElement import *
 
 
@@ -63,12 +64,19 @@ def main(**kwargs):
         raise FileNotFoundError(f"Папка с json файлами '{coco_annotations_path}' не найдена.")
 
 
-
     list_of_image_elements = []
     list_of_images_path = []
 
     # Получаем список всех файлов в папке annotations
     annotation_files = os.listdir(coco_annotations_path)
+
+    shutil.rmtree(yolo_dataset_path, ignore_errors=True) # очищаем старые данные в папке
+
+    if autosplit:
+        for folder_path in ['images', 'labels']:
+            for type in ['validation', 'train']:
+                path_create=os.path.join(yolo_dataset_path, type, folder_path)
+                os.makedirs(path_create, exist_ok=True)
 
     # Проходим по файлам аннотаций
     for annotation_file in annotation_files:
@@ -76,11 +84,14 @@ def main(**kwargs):
         type_data = os.path.splitext(annotation_file)[0].split('_')[-1]
         json_file_path = os.path.join(coco_annotations_path, annotation_file) # путь к json файлу
 
-        # Создаем папку, если ее нет, и удаляем все содержимое, если она есть
-        for folder_path in ['images', 'labels']:
-            path_create=os.path.join(yolo_dataset_path, type_data.lower(), folder_path)
-            shutil.rmtree(path_create, ignore_errors=True)
-            os.makedirs(path_create, exist_ok=True)
+        
+        # Создаем папку, если ее нет
+        if not autosplit:
+            for folder_path in ['images', 'labels']:
+                path_create=os.path.join(yolo_dataset_path, type_data.lower(), folder_path)
+                os.makedirs(path_create, exist_ok=True)
+            
+
 
         # открытие coco json
         with open(json_file_path, 'r') as f:
@@ -122,6 +133,14 @@ def main(**kwargs):
             list_of_lists_annotations = [ann['segmentation'] for ann in coco_data['annotations'] if ann['image_id'] == image_id]
             annotations = [sublist[0] for sublist in list_of_lists_annotations]
             classes = [ann['category_id']-1 for ann in coco_data['annotations'] if ann['image_id'] == image_id]
+            
+            if autosplit:
+                # Генерация случайного числа от 1 до 100
+                random_number = random.randint(1, 100)
+                # Если случайное число <= percent_val, то type_dataset = "validation", иначе "train"
+                type_dataset = "validation" if random_number <= percent_val else "train"
+            else:
+                type_dataset = type_data.lower()
 
             # Создаем объект класса ImageElement:
             element = ImageElement(
@@ -130,10 +149,10 @@ def main(**kwargs):
                     img_width=image['width'],
                     img_height=image['height'],
                     image_id=image_id,
-                    type_data=type_data.lower(),
-                    path_label_final=os.path.join(yolo_dataset_path, type_data.lower(),
+                    type_data=type_dataset,
+                    path_label_final=os.path.join(yolo_dataset_path, type_dataset,
                                                 'labels', os.path.splitext(file_name)[0]+'.txt'),
-                    path_image_final=os.path.join(yolo_dataset_path, type_data.lower(),
+                    path_image_final=os.path.join(yolo_dataset_path, type_dataset,
                                                 'images', file_name),
                     classes_names=[categories_dict[cl] for cl in classes],
                     classes_ids=classes,
@@ -167,11 +186,13 @@ def main(**kwargs):
     data_dict = {
         'names': list(categories_dict.values()),
         'nc': len(categories_dict),
-        'test': f'test/images',
-        'train': f'train/images',
-        'val': f'validation/images'
+        'test': 'test/images',
+        'train': 'train/images',
+        'val': 'validation/images'
     }
-
+    if autosplit:
+        data_dict['test'] = 'validation/images'
+    
     # Путь к файлу data.yaml
     data_yaml_path = f"{yolo_dataset_path}/data.yaml"  
 
