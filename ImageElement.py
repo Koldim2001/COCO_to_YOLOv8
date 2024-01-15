@@ -5,20 +5,20 @@ class ImageElement:
         path_image_initial: str,
         path_label_initial: str,
         img_width: int,
-        img_hight: int,
+        img_height: int,
         image_id: int,
-        type_data: None,
-        path_label_final: None,
-        path_image_final: None,
-        classes_names: [],
-        classes_ids: [],
-        point_list: [],
+        type_data: str,
+        path_label_final: str,
+        path_image_final: str,
+        classes_names: list,
+        classes_ids: list,
+        point_list: list,
     ) -> None:
         self.path_image_initial = path_image_initial  # путь к исходному изображению
         self.path_label_initial = path_label_initial  # путь к исходному coco json с данными о нем
 
         self.img_width = img_width
-        self.img_hight = img_hight
+        self.img_height = img_height
 
         self.image_id = image_id  # id изображения согласно coco
 
@@ -34,3 +34,19 @@ class ImageElement:
 
         # Список списков точек ex [[x,y,x,y,x,y],[x,y,x,yx,y,x,y]] len равен числу объектов на фото:
         self.point_list = point_list
+
+    def __str__(self):
+        return (
+            f"ImageElement info:\n"
+            f" - path_image_initial: {self.path_image_initial}\n"
+            f" - path_label_initial: {self.path_label_initial}\n"
+            f" - img_width: {self.img_width}\n"
+            f" - img_height: {self.img_height}\n"
+            f" - image_id: {self.image_id}\n"
+            f" - type_data: {self.type_data}\n"
+            f" - path_label_final: {self.path_label_final}\n"
+            f" - path_image_final: {self.path_image_final}\n"
+            f" - classes_names: {self.classes_names}\n"
+            f" - classes_ids: {self.classes_ids}\n"
+            f" - point_list: {self.point_list}\n"
+        )

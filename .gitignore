@@ -1,2 +1,6 @@
+**/__pycache__/ 
+.ipynb_checkpoints
+
 COCO_dataset/
 yolo_result_true/
+YOLO_dataset/
