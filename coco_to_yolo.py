@@ -10,7 +10,7 @@ from ImageElement import *
 @click.option(
     "--coco_dataset",
     default="COCO_dataset",
-    help="Папка с датасетом формата COCO (можно выгрузить из CVAT). По умолчанию COCO_dataset",
+    help="Папка с датасетом формата COCO 1.0 (можно выгрузить из CVAT). По умолчанию COCO_dataset",
     type=str,
 )
 @click.option(
