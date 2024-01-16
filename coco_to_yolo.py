@@ -1,10 +1,71 @@
 import os
-import yaml
 import json
 import shutil
-import click
 import random
-from ImageElement import *
+import click
+
+import yaml
+from shapely.geometry import Polygon
+from shapely.affinity import rotate
+
+from ImageElement import ImageElement
+
+
+def preprocessing_for_yolov8_obb_model(coco_json: str):
+    """
+    Проверяет наличие Oriented Bounding Boxes в формате COCO. Если они обнаружены,
+    заменяет bbox и rotation каждого объекта на значения четырех координат точек в разделе segmentation.
+    
+    Args:
+    - coco_json (str): Путь к файлу с данными COCO в формате JSON.
+    """
+
+    # Загрузка данных COCO из файла 
+    with open(coco_json, 'r') as f:
+        coco_data = json.load(f)
+
+    # Получение списка аннотаций из COCO
+    annotations = coco_data['annotations']
+    changes = 0
+
+    # Пройдем в цикле по аннотациям
+    for annotation in annotations:
+        segmentation = annotation['segmentation']
+
+        # Если segmentation пустое а bbox содержит информацию, выполним операцию
+        if not segmentation and annotation['bbox']:
+            bbox = annotation['bbox']
+            rotation_angle = annotation['attributes']['rotation']  # Предполагается, что есть информация о повороте
+
+            # Преобразование bbox в формат x, y, width, height
+            x, y, width, height = bbox
+
+            # Создание повернутого прямоугольника
+            rectangle = Polygon([(x, y), (x + width, y), (x + width, y + height), (x, y + height)])
+
+            # Поворот прямоугольника
+            rotated_rectangle = rotate(rectangle, rotation_angle, origin='center')
+
+            # Получение координат вершин повернутого прямоугольника
+            new_segmentation = list(rotated_rectangle.exterior.coords)
+
+            # Оставим только координаты вершин (первые 4 элемента)
+            new_segmentation = new_segmentation[:4]
+
+            # Преобразование списка вершин в желаемый формат
+            flattened_segmentation = [coord for point in new_segmentation for coord in point]
+
+            # Обновление значения в аннотации
+            annotation['segmentation'] = [flattened_segmentation]
+
+            changes += 1
+
+    if changes > 0:
+        print(f'Было обнаружено {changes} Oriented Bounding Boxes в файле {coco_json}')
+
+        # Сохранение обновленных данных в файл
+        with open(coco_json, 'w') as f:
+            json.dump(coco_data, f)
 
 
 @click.command()
@@ -84,7 +145,9 @@ def main(**kwargs):
         type_data = os.path.splitext(annotation_file)[0].split('_')[-1]
         json_file_path = os.path.join(coco_annotations_path, annotation_file) # путь к json файлу
 
-        
+        # Предобработка для случая YOLOv8-obb
+        preprocessing_for_yolov8_obb_model(coco_json=json_file_path)
+
         # Создаем папку, если ее нет
         if not autosplit:
             for folder_path in ['images', 'labels']:
