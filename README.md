@@ -15,10 +15,12 @@ COCO_dataset/
 |   |-- image2.jpg
 |   |-- ...
 ```
+Пример использования репозитория представлен в видео на YouTube - [ССЫЛКА](https://www.youtube.com/watch?v=FF3mIWF0vFs&t=6s?t=34m49s)
+
 
 ## Установка:
 ```
-git clone https://github.com/Koldim2001/COCO_to_YOLOv8.git
+git clone https:/github.com/Koldim2001/COCO_to_YOLOv8.git
 
 cd COCO_to_YOLOv8
 
