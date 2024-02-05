@@ -139,6 +139,37 @@ def main(**kwargs):
                 path_create=os.path.join(yolo_dataset_path, type, folder_path)
                 os.makedirs(path_create, exist_ok=True)
 
+    ### Запуск проверки отсутвия дубликатов в разных подвыборках ###
+    # Создаем словарь для хранения файлов и их соответствующих JSON файлов
+    file_json_mapping = {}
+
+    # Проходим по файлам аннотаций
+    for annotation_file in annotation_files:
+        json_file_path = os.path.join(coco_annotations_path, annotation_file)
+        with open(json_file_path, 'r') as f:
+            coco_data = json.load(f)
+
+        # Получаем список изображений из JSON
+        images = coco_data['images']
+
+        # Проходим по изображениям и обновляем словарь file_json_mapping
+        for image in images:
+            file_name = image['file_name']
+            if file_name not in file_json_mapping:
+                file_json_mapping[file_name] = [annotation_file]
+            else:
+                file_json_mapping[file_name].append(annotation_file)
+
+    # Проверяем, если у какого-либо файла есть более одного вхождения
+    for file_name, json_files in file_json_mapping.items():
+        if len(json_files) > 1:
+            print(f"Файл {file_name} встречается в следующих JSON файлах: {json_files}")
+            print(f'В каком-либо из JSON файлов удалите в разделе "images" словарь ' \
+                  f'с описанием этой фотографии, иначе будет ошибка при выполнении кода')
+            raise SystemExit
+
+    ### Запуск оновного кода ###
+           
     # Проходим по файлам аннотаций
     for annotation_file in annotation_files:
         # Парсим название файла изображения из файла аннотации
