@@ -15,8 +15,8 @@ COCO_dataset/
 |   |-- image2.jpg
 |   |-- ...
 ```
-Пример использования репозитория для задачи YOLOv8-seg представлен в видео на YouTube - [ССЫЛКА](https://www.youtube.com/watch?v=FF3mIWF0vFs&t=6s?t=34m49s)
-Пример использования репозитория для задачи YOLOv8-obb представлен в видео на YouTube - [ССЫЛКА](https://www.youtube.com/watch?v=CZ_kZlto3IY&t=920s?t=20m02s)
+Пример использования репозитория для задачи YOLOv8-seg представлен в видео на YouTube - [__ССЫЛКА__](https://www.youtube.com/watch?v=FF3mIWF0vFs&t=6s?t=34m49s) <br/>
+Пример использования репозитория для задачи YOLOv8-obb представлен в видео на YouTube - [__ССЫЛКА__](https://www.youtube.com/watch?v=CZ_kZlto3IY&t=920s?t=20m2s)
 
 ## Установка:
 ```
