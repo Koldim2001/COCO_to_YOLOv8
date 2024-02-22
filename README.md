@@ -20,7 +20,7 @@ COCO_dataset/
 
 ## Установка:
 ```
-git clone https:/github.com/Koldim2001/COCO_to_YOLOv8.git
+git clone https://github.com/Koldim2001/COCO_to_YOLOv8.git
 
 cd COCO_to_YOLOv8
 
