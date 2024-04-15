@@ -11,14 +11,14 @@ from shapely.affinity import rotate
 from ImageElement import ImageElement
 
 
-def preprocessing_for_yolov8_obb_model(coco_json: str, language_ru=False):
+def preprocessing_for_yolov8_obb_model(coco_json: str, lang_ru=False):
     """
     Checks for Oriented Bounding Boxes in COCO format. If found,
     replaces the bbox and rotation of each object with the coordinates of four points in the segmentation section.
     
     Args:
     - coco_json (str): Path to the file containing COCO data in JSON format.
-    - language_ru (bool): If True, all comments will be in Russian (otherwise in English).
+    - lang_ru (bool): If True, all comments will be in Russian (otherwise in English).
     """
 
     # Loading COCO data from file 
@@ -62,7 +62,7 @@ def preprocessing_for_yolov8_obb_model(coco_json: str, language_ru=False):
             changes += 1
 
     if changes > 0:
-        if language_ru:
+        if lang_ru:
             print(f'Было обнаружено {changes} Oriented Bounding Boxes в файле {coco_json}')
         else:
             print(f'Found {changes} Oriented Bounding Boxes in the file {coco_json}')
@@ -76,32 +76,38 @@ def preprocessing_for_yolov8_obb_model(coco_json: str, language_ru=False):
 @click.option(
     "--coco_dataset",
     default="COCO_dataset",
-    help="Папка с датасетом формата COCO 1.0 (можно выгрузить из CVAT). По умолчанию COCO_dataset",
+    help="Folder with COCO 1.0 format dataset (can be exported from CVAT). Default is COCO_dataset",
     type=str,
 )
 @click.option(
     "--yolo_dataset",
     default="YOLO_dataset",
-    help="Папка с итоговым датасетом формата YOLOv8. По умолчанию YOLO_dataset",
+    help="Folder with the resulting YOLOv8 format dataset. Default is YOLO_dataset",
     type=str,
 )
 @click.option(
     "--print_info",
     default=False,
-    help="Вкл/Выкл режима вывода логов обработки. По умолчанию отключен",
+    help="Enable/Disable processing log output mode. Default is disabled",
     type=bool,
 )
 @click.option(
     "--autosplit",
-    help="Вкл/Выкл режима автоматического разделения на train/val. По умолчанию отключен (берет согласно разметке CVAT)",
+    help="Enable/Disable automatic split into train/val. Default is disabled (uses the CVAT annotations)",
     default=False,
     type=bool,
 )
 @click.option(
     "--percent_val",
-    help="Процент данных на val при выборе режима autosplit=True. По умолчанию 25%",
+    help="Percentage of data for validation when using autosplit=True. Default is 25%",
     default=25,
     type=float,
+)
+@click.option(
+    "--lang_ru",
+    help="Sets the Russian language of comments, if selected value is True. English by default",
+    default=False,
+    type=bool,
 )
 def main(**kwargs):
     # ------------------ ARG parse ------------------
@@ -110,6 +116,7 @@ def main(**kwargs):
     print_info = kwargs["print_info"]
     autosplit = kwargs["autosplit"]
     percent_val = kwargs["percent_val"]
+    lang_ru = kwargs["lang_ru"]
 
     coco_annotations_path = os.path.join(coco_dataset_path, 'annotations')
     coco_images_path = os.path.join(coco_dataset_path, 'images')
