@@ -257,7 +257,19 @@ def main(**kwargs):
             
             # Find corresponding annotations for the image
             list_of_lists_annotations = [ann['segmentation'] for ann in coco_data['annotations'] if ann['image_id'] == image_id]
-            annotations = [sublist[0] for sublist in list_of_lists_annotations]
+            try:
+                annotations = [sublist[0] for sublist in list_of_lists_annotations]
+            except:
+                if lang_ru:
+                    print(f"В разметке фотографии {file_name} имеются объекты, не являющиеся полигонами. "\
+                        f"\nНеобходимо, чтобы все объекты для обучения YOLOv8-seg были размечены как полигоны! "\
+                        f"\nИсправьте это и заново выгрузите датасет.")
+                else:
+                    print(f"The annotations for the image {file_name} contain objects that are not polygons. "\
+                      f"\nAll objects for training YOLOv8-seg must be annotated as polygons! "\
+                      f"\nPlease correct this and reload the dataset.")
+                raise SystemExit
+            
             classes = [ann['category_id']-1 for ann in coco_data['annotations'] if ann['image_id'] == image_id]
             
             if autosplit:
