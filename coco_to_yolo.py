@@ -188,7 +188,7 @@ def main(**kwargs):
         json_file_path = os.path.join(coco_annotations_path, annotation_file) # путь к json файлу
 
         # Предобработка для случая YOLOv8-obb
-        preprocessing_for_yolov8_obb_model(coco_json=json_file_path)
+        preprocessing_for_yolov8_obb_model(coco_json=json_file_path, lang_ru=lang_ru)
 
         # Создаем папку, если ее нет
         if not autosplit:
