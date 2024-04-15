@@ -14,27 +14,27 @@ class ImageElement:
         classes_ids: list,
         point_list: list,
     ) -> None:
-        self.path_image_initial = path_image_initial  # путь к исходному изображению
-        self.path_label_initial = path_label_initial  # путь к исходному coco json с данными о нем
+        self.path_image_initial = path_image_initial  # path to the original image
+        self.path_label_initial = path_label_initial  # path to the original COCO json with its data
 
         self.img_width = img_width
         self.img_height = img_height
 
-        self.image_id = image_id  # id изображения согласно coco
+        self.image_id = image_id  # image id according to COCO
 
-        self.type_data = type_data  # типа данных (train, test, valid)
+        self.type_data = type_data  # type of data (train, test, valid)
 
-        self.path_label_final = path_label_final  # путь к итоговому лейблу yolo
-        self.path_image_final = path_image_final  # путь к итоговому изображению yolo формат
+        self.path_label_final = path_label_final  # path to the final YOLO label
+        self.path_image_final = path_image_final  # path to the final YOLO image format
 
-        # Список имен классов ex:[car,car,car,dog] - 3 объекта класса car и 1 класса dog:
+        # List of class names ex: [car, car, car, dog] - 3 objects of class car and 1 object of class dog:
         self.classes_names = classes_names
-        # Список номеров классов от 0 до N-1 ex:[0,0,0,1] - 3 объекта класса 0 и 1 класса 1:
+        # List of class numbers from 0 to N-1 ex: [0, 0, 0, 1] - 3 objects of class 0 and 1 object of class 1:
         self.classes_ids = classes_ids  
 
-        # Список списков точек ex [[x,y,x,y,x,y],[x,y,x,yx,y,x,y]] len равен числу объектов на фото:
+        # List of lists of points ex [[x, y, x, y, x, y], [x, y, x, y, x, y]] length equals the number of objects in the photo:
         self.point_list = point_list
-
+        
     def __str__(self):
         return (
             f"ImageElement info:\n"

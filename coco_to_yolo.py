@@ -11,59 +11,63 @@ from shapely.affinity import rotate
 from ImageElement import ImageElement
 
 
-def preprocessing_for_yolov8_obb_model(coco_json: str):
+def preprocessing_for_yolov8_obb_model(coco_json: str, language_ru=False):
     """
-    Проверяет наличие Oriented Bounding Boxes в формате COCO. Если они обнаружены,
-    заменяет bbox и rotation каждого объекта на значения четырех координат точек в разделе segmentation.
+    Checks for Oriented Bounding Boxes in COCO format. If found,
+    replaces the bbox and rotation of each object with the coordinates of four points in the segmentation section.
     
     Args:
-    - coco_json (str): Путь к файлу с данными COCO в формате JSON.
+    - coco_json (str): Path to the file containing COCO data in JSON format.
+    - language_ru (bool): If True, all comments will be in Russian (otherwise in English).
     """
 
-    # Загрузка данных COCO из файла 
+    # Loading COCO data from file 
     with open(coco_json, 'r') as f:
         coco_data = json.load(f)
 
-    # Получение списка аннотаций из COCO
+    # Getting the list of annotations from COCO
     annotations = coco_data['annotations']
     changes = 0
 
-    # Пройдем в цикле по аннотациям
+    # Iterating through the annotations
     for annotation in annotations:
         segmentation = annotation['segmentation']
 
-        # Если segmentation пустое а bbox содержит информацию, выполним операцию
+        # If segmentation is empty and bbox contains information, perform the operation
         if not segmentation and annotation['bbox']:
             bbox = annotation['bbox']
-            rotation_angle = annotation['attributes']['rotation']  # Предполагается, что есть информация о повороте
+            rotation_angle = annotation['attributes']['rotation']  # Assumes rotation information is available
 
-            # Преобразование bbox в формат x, y, width, height
+            # Converting bbox to x, y, width, height format
             x, y, width, height = bbox
 
-            # Создание повернутого прямоугольника
+            # Creating a rotated rectangle
             rectangle = Polygon([(x, y), (x + width, y), (x + width, y + height), (x, y + height)])
 
-            # Поворот прямоугольника
+            # Rotating the rectangle
             rotated_rectangle = rotate(rectangle, rotation_angle, origin='center')
 
-            # Получение координат вершин повернутого прямоугольника
+            # Getting the coordinates of the vertices of the rotated rectangle
             new_segmentation = list(rotated_rectangle.exterior.coords)
 
-            # Оставим только координаты вершин (первые 4 элемента)
+            # Keeping only the vertex coordinates (first 4 elements)
             new_segmentation = new_segmentation[:4]
 
-            # Преобразование списка вершин в желаемый формат
+            # Converting the list of vertices into the desired format
             flattened_segmentation = [coord for point in new_segmentation for coord in point]
 
-            # Обновление значения в аннотации
+            # Updating the value in the annotation
             annotation['segmentation'] = [flattened_segmentation]
 
             changes += 1
 
     if changes > 0:
-        print(f'Было обнаружено {changes} Oriented Bounding Boxes в файле {coco_json}')
+        if language_ru:
+            print(f'Было обнаружено {changes} Oriented Bounding Boxes в файле {coco_json}')
+        else:
+            print(f'Found {changes} Oriented Bounding Boxes in the file {coco_json}')
 
-        # Сохранение обновленных данных в файл
+        # Saving the updated data to the file
         with open(coco_json, 'w') as f:
             json.dump(coco_data, f)
 
