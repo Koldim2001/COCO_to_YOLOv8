@@ -36,6 +36,8 @@ class ImageElement:
         self.point_list = point_list
         
     def __str__(self):
+        # Converting each segmentation to the number of points
+        segmentations_lengths = [len(segmentation) // 2 for segmentation in self.point_list]
         return (
             f"ImageElement info:\n"
             f" - path_image_initial: {self.path_image_initial}\n"
@@ -48,5 +50,5 @@ class ImageElement:
             f" - path_image_final: {self.path_image_final}\n"
             f" - classes_names: {self.classes_names}\n"
             f" - classes_ids: {self.classes_ids}\n"
-            f" - point_list: {self.point_list}\n"
+            f" - points_amount: {segmentations_lengths}\n"
         )
