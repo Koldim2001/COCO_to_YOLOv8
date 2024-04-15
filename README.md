@@ -15,12 +15,12 @@ COCO_dataset/
 |   |-- image2.jpg
 |   |-- ...
 ```
-Пример использования репозитория представлен в видео на YouTube - [ССЫЛКА](https://www.youtube.com/watch?v=FF3mIWF0vFs&t=6s?t=34m49s)
-
+Пример использования репозитория для задачи YOLOv8-seg представлен в видео на YouTube - [__ССЫЛКА__](https://www.youtube.com/watch?v=FF3mIWF0vFs&t=6s?t=34m49s) <br/>
+Пример использования репозитория для задачи YOLOv8-obb представлен в видео на YouTube - [__ССЫЛКА__](https://www.youtube.com/watch?v=CZ_kZlto3IY&t=920s?t=20m2s)
 
 ## Установка:
 ```
-git clone https:/github.com/Koldim2001/COCO_to_YOLOv8.git
+git clone https://github.com/Koldim2001/COCO_to_YOLOv8.git
 
 cd COCO_to_YOLOv8
 
