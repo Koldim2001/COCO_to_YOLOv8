@@ -2,7 +2,7 @@
 
 Репозиторий позволяет преобразовать разметку формата COCO в формат, поддерживаемый для обучения моделей YOLOv8-seg (инстанс сегментация) и YOLOv8-obb (детекция повернутых боксов).
 
-Ключевое применение репозитория -> работа с выгруженной разметкой полигонов (или повернутых прямоугольников в случае с YOLOv8-obb) из приложения CVAT в формате COCO 1.0 (с указанием режима save images = True).
+Ключевое применение репозитория -> работа с выгруженной разметкой **полигонов** (или **повернутых прямоугольников** в случае с YOLOv8-obb) из приложения CVAT в формате COCO 1.0 (с указанием режима save images = True).
 
 Если же используете без CVAT, то убедитесь перед запуском, что ваша папка с COCO датасетом имеет такую структуру:
 ```
@@ -72,7 +72,7 @@ python coco_to_yolo.py --coco_dataset="dataset_folder" --autosplit=True --percen
 
 The repository allows converting annotations in COCO format to a format compatible with training YOLOv8-seg models (instance segmentation) and YOLOv8-obb models (rotated bounding box detection).
 
-Key usage of the repository -> handling annotated polygons (or rotated rectangles in the case of YOLOv8-obb) exported from the CVAT application in COCO 1.0 format (with the save images mode set to True).
+Key usage of the repository -> handling annotated **polygons** (or **rotated rectangles** in the case of YOLOv8-obb) exported from the CVAT application in COCO 1.0 format (with the save images mode set to True).
 
 If you use it without CVAT, make sure that your COCO dataset folder has the following structure:
 
