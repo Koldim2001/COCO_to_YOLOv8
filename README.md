@@ -16,7 +16,7 @@ COCO_dataset/
 |   |-- image2.jpg
 |   |-- ...
 ```
-PS: For the instance segmentation task, Ultralytics YOLO11-seg, YOLOv9-seg and YOLOv5-seg models are also supported (since they have similar annotation format to v8).
+PS: For the instance segmentation task, Ultralytics YOLO12-seg, YOLO11-seg, YOLOv9-seg and YOLOv5-seg models are also supported (since they have similar annotation format to v8).
 
 
 ## Installation:
@@ -88,7 +88,7 @@ COCO_dataset/
 |   |-- image2.jpg
 |   |-- ...
 ```
-PS: Для задчи инстанс сегментации имеется также поддержка моделей Ultralytics YOLO11-seg, YOLOv9-seg и YOLOv5-seg (так как у них аналогичная разметка с версией v8)
+PS: Для задчи инстанс сегментации имеется также поддержка моделей Ultralytics YOLO12-seg, YOLO11-seg, YOLOv9-seg и YOLOv5-seg и других (так как у них аналогичная разметка с версией v8)
 
 ## Примеры использования:
 
